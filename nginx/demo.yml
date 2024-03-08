@@ -1,0 +1,31 @@
+---
+- name: Install Nginx and deploy simple HTML website
+  hosts: local
+  become: yes
+  tasks:
+    # - name: Update apt package cache
+    #   apt:
+    #     update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy HTML files to Nginx root directory
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/index.html
+        remote_src: yes
+
+    - name: Ensure Nginx service is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+        
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes
